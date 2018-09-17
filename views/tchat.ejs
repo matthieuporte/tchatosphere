@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Tchatosphere</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- favicon -->
+        <link rel="shortcut icon" href="https://matthieuporte.github.io/images/logo-tchat.png" type="image/x-icon" />
+        <!--bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	    <!--fonts-awesome-->
+	    <link rel="stylesheet" href="https://matthieuporte.github.io/font-awesome/css/font-awesome.min.css">
+        <!--emoji-->
+        <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+        <style>
+        	body{
+        		margin:0;
+                overflow-x: hidden;
+        	}
+            p{
+                margin-bottom: 5px;
+            }
+            a{
+                text-decoration: none;
+                color: black; 
+            }
+            a:hover{
+                text-decoration: none;
+                color: black; 
+            }
+            a:link{
+                text-decoration: none;
+                color: black; 
+            }
+            a:visited{
+                text-decoration: none;
+                color: black;
+            }
+            a:focus{
+                outline: none;
+            }
+            hr{
+                margin: 0;
+                border: 0;
+                height: 1px;
+                background-image: linear-gradient(to right, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.10));
+            }
+            button{
+                border: none;
+                background-color: white;
+            }
+            button:focus{
+                outline: none;
+                background-color: white;
+            }
+            button:visited{
+                outline: none;
+            }
+            #message{
+                border: none;
+                padding-bottom: 13px;
+                padding-top: 13px; 
+                padding-left: 10px;
+                width: calc(100% - 100px);  
+            }
+            input:focus{
+                outline: none;
+                background-color: white;
+            }/* width */
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+             
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #888; 
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #666; 
+            }
+            #formulaire_chat{
+                position: fixed;
+                bottom: 0px;
+                width: 100%;
+                background-color: white;
+            }
+	        #zone_chat{
+	        	margin-top: 55px;
+                margin-bottom: 55px;
+                padding-left:5px;
+                padding-right:5px;
+                padding-top:calc(100vh - 160px); 
+	        }
+            .pseudo:hover{
+                cursor: default;
+            }
+            .pseudo{
+            	text-decoration: underline;
+                font-weight: bolder;
+                font-size: large;
+                float: left;
+            }
+            #txtonglet{
+                display: none;
+            }
+            .autre-message{
+                margin-bottom: 5px;
+            }
+            .bulle-autre-message{
+                background-color: #ECECEC;
+                border-radius: 15px; 
+                padding: 5px 10px 5px 10px ;
+                margin-left: 2px;
+                font-size: large;
+                line-height: 1.5em;
+                text-align: left;
+                float: left;
+                margin-bottom: 5px;
+            }
+            .bulle-son-message{
+                background-color: #FDE3A7;
+                border-radius: 15px; 
+                padding: 5px 10px 5px 10px ;
+                margin-right: 2px;
+                font-size: large;
+                line-height: 1.5em;
+                text-align: left;
+                float: right;
+                margin-bottom: 5px;
+            }
+            #icons{
+                float: right;
+                color: #252828;
+                padding-bottom: 13px;
+                padding-top: 13px;
+                margin-right: 10px;  
+            }
+            #send{
+                color: #FDE3A7;
+            }
+            .emoji {
+               height: 1em; /*edit for height*/
+               margin: 0 .05em 0 .1em;
+               vertical-align: -0.1em;
+            }
+            #smiley-list{
+                height: 250px;
+                width: 255px;
+                position: fixed;
+                bottom: 49px;
+                right:20px;
+                background-color: #efefef;
+                border: 0.5px #ABB7B7 solid;
+                border-radius: 5px 5px 0px 0px;
+            }
+            #smiley-icon:hover{
+                font-weight: bolder; 
+            }
+            #close{
+                float: right;
+                margin-top: 10px;
+                margin-left: 5%;
+                margin-right: 10px;
+            }
+            #agrandir{
+                margin-left: 7px;
+                margin-right: 5%;
+                float: left;
+                margin-top: 10px;
+            }
+            #retrecir{
+                margin-left: 7px;
+                margin-right: 5%;
+                float: left;
+                margin-top: 10px;
+            }
+            #bas-btn-list-emoji{
+                margin-top: 5px; 
+                width: 100%;
+            }
+            #icon-list{
+                padding-top: 5px;
+                padding-bottom: 30px;
+            }
+            div#smiley-list-div i{
+                margin-left: 4px;
+                margin-bottom: 5px;
+            }
+            i{
+                margin-left: 3px;
+            }
+            #smiley-list-div{
+                overflow-y:auto;
+                height: 206px;
+                padding-top: 5px;
+            }
+            .description-c{
+                border-bottom: solid 1px #ABB7B7; 
+                margin-bottom: 3px;
+            }
+            .c{
+                margin-bottom: 7px;
+            }
+            @media (min-width: 1000px){
+                #zone_chat{
+                    margin-left:25%;
+                    margin-right:25%;
+                }
+                #message{
+                    padding-left: 25vw;
+                    width: calc(100vw - 150px);
+                }
+            }
+            @media (max-width: 303px){
+                #icons{
+                    display: none;
+                }
+            }
+            @media (max-width: 600px){
+                #agrandir{
+                    display: none;
+                }
+            }
+            @media (max-height: 600px){
+                #agrandir{
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+ 
+    <body>
+        <p id="txtonglet"><%= PostOnglet %></p>
+    	<!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" id="txtpseudo"><%= PostPseudo %></a>
+        </div>
+      </div>
+    </nav>
+
+            <section id="zone_chat"></section>
+            <div id="bas-de-page"></div>
+
+                
+	        <form action="/" method="post" id="formulaire_chat">
+                <hr>
+	                <input name="message" type="message"  id="message" placeholder="Ecrivez ici" autofocus autocomplete="off">
+                <div id="icons"> 
+                    <i class="fa fa-smile-o fa-lg" aria-hidden="true" id="smiley-icon"></i>
+                    <button type="submit"><i class="fa fa-paper-plane fa-lg" aria-hidden="true" type="submit"></i></button>                        
+                </div>
+	        </form>
+            <div id="smiley-list">
+                    <div id="icon-list">
+                        <i id="agrandir" class="fa fa-expand fa-lg" aria-hidden="true"></i>
+                        <i id="retrecir" class="fa fa-compress fa-lg" aria-hidden="true"></i>
+                        <i id="close" class="fa fa-times fa-lg" aria-hidden="true"></i>  
+                    </div>  
+                <hr id="bas-btn-list-emoji">
+                <div id="smiley-list-div">
+                    <div class="description-c">&nbsp;reaction</div>
+                    <div id="c0" class="c"></div>
+                    <div class="description-c">&nbsp;visages</div>
+                    <div id="c1" class="c"></div>
+                    <div class="description-c">&nbsp;objets</div>
+                    <div id="c2" class="c"></div>
+                    <div class="description-c">&nbsp;animaux</div>
+                    <div id="c3" class="c"></div>
+                    <div class="description-c">&nbsp;symboles</div>
+                    <div id="c4" class="c"></div>
+                    <div class="description-c" class="c">&nbsp;flag</div>
+                    <div id="c-divers"></div>
+                </div>
+            </div>
+        
+            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>      
+        <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyBWDaAF6emxRAFoMgfb33jSwFZKL3pVg5U",
+            authDomain: "solid-heaven-195508.firebaseapp.com",
+            databaseURL: "https://solid-heaven-195508.firebaseio.com",
+            projectId: "solid-heaven-195508",
+            storageBucket: "solid-heaven-195508.appspot.com",
+            messagingSenderId: "232900517661"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script>
+        
+            // Connexion à socket.io
+            var socket = io.connect('http://tchatosphere.cloudno.de/');
+            // var socket = io.connect('http://localhost:8080');
+
+            var emo = [
+                '<i class="em em-grey_question"></i>',
+                [":100:","100","&colon;100&colon;","<i class=\"em em-100\"></i>","4"],
+                [":bat:","bat","&colon;bat&colon;","<i class=\"em em-bat\"></i>","3"],
+                [":alien:","alien","&colon;alien&colon;",'<i class="em em-alien"></i>',"1"],
+                [":airplaine:","airplaine","&colon;airplaine&colon;",'<i class="em em-airplane"></i>',"2"],
+                [":abcd:","abcd","&colon;abcd&colon;",'<i class="em em-abcd"></i>',"4"],
+                [":angry:","angry","&colon;angry&colon;",'<i class="em em-angry"></i>',"1"],
+                [":anguished:","anguished","&colon;anguished&colon;",'<i class="em em-anguished"></i>',"1"],
+                [":ambulance:","ambulance","&colon;ambulance&colon;",'<i class="em em-ambulance"></i>',"2"],
+                [":atom:","atom","&colon;atom&colon;",'<i class="em em-atom_symbol"></i>',"4"],
+                [":abc:","abc","&colon;abc&colon;",'<i class="em em-abc"></i>',"4"],
+                [":ant:","ant","&colon;ant&colon;",'<i class="em em-ant"></i>',"3"],
+                [":art:","art","&colon;art&colon;",'<i class="em em-art"></i>',"4"],
+                [":1234:","1234","&colon;1234&colon;",'<i class="em em-1234"></i>',"4"],
+                [":apple:","apple","&colon;apple&colon;",'<i class="em em-apple"></i>',"2"],
+                [":angel:","angel","&colon;angel&colon;",'<i class="em em-angel"></i>',"1"],
+                [":astonished:","astonished","&colon;astonished&colon;",'<i class="em em-astonished"></i>',"1"],
+                [":baby:","baby","&colon;baby&colon;",'<i class="em em-baby"></i>',"1"],
+                [":--1:","--1","&colon;--1&colon;",'<i class="em em---1"></i>',"0"],
+                [":blush:","blush","&colon;blush&colon;",'<i class="em em-blush"></i>',"1"],
+                [":cry:","cry","&colon;cry&colon;",'<i class="em em-cry"></i>',"1"],
+                [":confounded:","confounded","&colon;confounded&colon;",'<i class="em em-confounded"></i>',"1"],
+                [":cat:","cat","&colon;cat&colon;",'<i class="em em-cat"></i>',"3"],
+                [":car:","car","&colon;car&colon;",'<i class="em em-car"></i>',"2"],
+                [":blue-heart:","blue-heart","&colon;blue-heart&colon;",'<i class="em em-blue_heart"></i>',"4"],
+                [":confused:","confused","&colon;confused&colon;",'<i class="em em-confused"></i>',"1"],
+                [":cold-sweat:","cold-sweat","&colon;cold-sweat&colon;",'<i class="em em-cold_sweat"></i>',"1"],
+                [":cookie:","cookie","&colon;cookie&colon;",'<i class="em em-cookie"></i>',"2"],
+                [":broken-heart:","broken-heart","&colon;broken-heart&colon;",'<i class="em em-broken_heart"></i>',"4"],
+                [":expressionless:","expressionless","&colon;expressionless&colon;",'<i class="em em-expressionless"></i>',"1"],
+                [":drooling-face:","drooling-face","&colon;drooling-face&colon;",'<i class="em em-drooling_face"></i>',"1"],
+                [":ear:","ear","&colon;ear&colon;",'<i class="em em-ear"></i>',"0"],
+                [":disappointed:","disappointed","&colon;disappointed&colon;",'<i class="em em-disappointed"></i>',"1"],
+                [":dizzy-face:","dizzy-face","&colon;dizzy-face&colon;",'<i class="em em-dizzy_face"></i>',"1"],
+                [":disappointed-relieved:","disappointed-relieved","&colon;disappointed-relieved&colon;",'<i class="em em-disappointed_relieved"></i>',"1"],
+                [":cowboy:","cowboy","&colon;cowboy&colon;",'<i class="em em-face_with_cowboy_hat"></i>',"1"],
+                [":chut:","chut","&colon;chut&colon;",'<i class="em em-face_with_finger_covering_closed_lips"></i>',"1"],
+                [":head-bandage:","head-bandage","&colon;head-bandage&colon;",'<i class="em em-face_with_head_bandage"></i>',"1"],
+                [":monocle:","monocle","&colon;monocle&colon;",'<i class="em em-face_with_monocle"></i>',"1"],
+                [":one-eyebrow-raised:","one-eyebrow-raised","&colon;one-eyebrow-raised&colon;",'<i class="em em-face_with_one_eyebrow_raised"></i>',"1"],
+                [":punch:","punch","&colon;punch&colon;",'<i class="em em-facepunch"></i>',"0"],
+                [":sick:","sick","&colon;sick&colon;",'<i class="em em-face_with_thermometer"></i>',"1"],
+                [":rolling-eyes:","rolling-eyes","&colon;rolling-eyes&colon;",'<i class="em em-face_with_rolling_eyes"></i>',"1"],
+                [":factory:","factory","&colon;factory&colon;",'<i class="em em-factory"></i>',"2"],
+                [":vomi:","vomi","&colon;vomi&colon;",'<i class="em em-face_with_open_mouth_vomiting"></i>',"1"],
+                [":fairy:","fairy","&colon;fairy&colon;",'<i class="em em-fairy"></i>',"1"],
+                [":fearful:","fearful","&colon;fearful&colon;",'<i class="em em-fearful"></i>',"1"],
+                [":fist:","fist","&colon;fist&colon;",'<i class="em em-fist"></i>',"0"],
+                [":file-folder:","file-folder","&colon;file-folder&colon;",'<i class="em em-file_folder"></i>',"4"],
+                [":fireworks:","fireworks","&colon;fireworks&colon;",'<i class="em em-fireworks"></i>',"4"],
+                [":medal:","medal","&colon;medal&colon;",'<i class="em em-first_place_medal"></i>',"4"],
+                [":flag-fr:","flag-fr","&colon;flag-fr&colon;",'<i class="em em-flag-mf"></i>',"5"],
+                [":flag-usa:","flag-usa","&colon;flag-usa&colon;",'<i class="em em-flag-um"></i>',"5"],
+                [":flushed:","flushed","&colon;flushed&colon;",'<i class="em em-flushed"></i>',"1"],
+                [":ghost:","ghost","&colon;ghost&colon;",'<i class="em em-ghost"></i>',"1"],
+                [":frowning:","frowning","&colon;frowning&colon;",'<i class="em em-frowning"></i>',"1"],
+                [":gift:","gift","&colon;gift&colon;",'<i class="em em-gift"></i>',"2"],
+                [":gift-heart:","gift-heart","&colon;gift-heart&colon;",'<i class="em em-gift_heart"></i>',"4"],
+                [":grimacing:","grimacing","&colon;grimacing&colon;",'<i class="em em-grimacing"></i>',"1"],
+                [":foggy:","foggy","&colon;foggy&colon;",'<i class="em em-foggy"></i>',"4"],
+                [":moon:","moon","&colon;moon&colon;",'<i class="em em-full_moon"></i>',"2"],
+                [":gem:","gem","&colon;gem&colon;",'<i class="em em-gem"></i>',"2"],
+                [":grin:","grin","&colon;grin&colon;",'<i class="em em-grin"></i>',"1"],
+                [":goat:","goat","&colon;goat&colon;",'<i class="em em-goat"></i>',"3"],
+                [":floppy-disk:","floppy-disk","&colon;floppy-disk&colon;",'<i class="em em-floppy_disk"></i>',"4"],
+                [":four-leaf-clover:","four-leaf-clover","&colon;four-leaf-clover&colon;",'<i class="em em-four_leaf_clover"></i>',"4"],
+                [":green-heart:","green-heart","&colon;green-heart&colon;",'<i class="em em-green_heart"></i>',"4"],
+                [":grinning:","grinning","&colon;grinning&colon;",'<i class="em em-grinning"></i>',"1"],
+                [":fool:","fool","&colon;fool&colon;",'<i class="em em-grinning_face_with_one_large_and_one_small_eye"></i>',"1"],
+                [":fog:","fog","&colon;fog&colon;",'<i class="em em-fog"></i>',"4"],
+                [":fountain:","fountain","&colon;fountain&colon;",'<i class="em em-fountain"></i>',"2"],
+                [":internet:","internet","&colon;internet&colon;",'<i class="em em-globe_with_meridians"></i>',"4"],
+                [":gorilla:","gorilla","&colon;gorilla&colon;",'<i class="em em-gorilla"></i>',"3"],
+                [":frog:","frog","&colon;frog&colon;",'<i class="em em-frog"></i>',"3"],
+                [":flag-gb:","flag-gb","&colon;flag-gb&colon;",'<i class="em em-gb"></i>',"5"],
+                [":star-eyes:","star-eyes","&colon;star-eyes&colon;",'<i class="em em-grinning_face_with_star_eyes"></i>',"1"],
+                [":hammer-and-pick:","hammer-and-pick","&colon;hammer-and-pick&colon;",'<i class="em em-hammer_and_pick"></i>',"2"],
+                [":hammer-and-wrench:","hammer-and-wrench","&colon;hammer-and-wrench&colon;",'<i class="em em-hammer_and_wrench"></i>',"2"],
+                [":hammer:","hammer","&colon;hammer&colon;",'<i class="em em-hammer"></i>',"2"],
+                [":gun:","gun","&colon;gun&colon;",'<i class="em em-gun"></i>',"2"],
+                [":hand:","hand","&colon;hand&colon;",'<i class="em em-hand"></i>',"0"],
+                [":hamburger:","hamburger","&colon;hamburger&colon;",'<i class="em em-hamburger"></i>',"2"],
+                [":hope:","hope","&colon;hope&colon;",'<i class="em em-hand_with_index_and_middle_fingers_crossed"></i>',"0"],
+                [":heavy-dollar-sign:","heavy-dollar-sign","&colon;heavy-dollar-sign&colon;",'<i class="em em-heavy_dollar_sign"></i>',"4"],
+                [":heartbeat:","heartbeat","&colon;heartbeat&colon;",'<i class="em em-heartbeat"></i>',"4"],
+                [":hash:","hash","&colon;hash&colon;",'<i class="em em-hash"></i>',"4"],
+                [":handshake:","handshake","&colon;handshake&colon;",'<i class="em em-handshake"></i>',"0"],
+                [":heart-eyes:","heart-eyes","&colon;heart-eyes&colon;",'<i class="em em-heart_eyes"></i>',"1"],
+                [":hatched-chick:","hatched-chick","&colon;hatched-chick&colon;",'<i class="em em-hatched_chick"></i>',"3"],
+                [":heart:","heart","&colon;heart&colon;",'<i class="em em-heart"></i>',"4"],
+                [":hankey:","hankey","&colon;hankey&colon;",'<i class="em em-hankey"></i>',"4"],
+                [":japanese-ogre:","japanese-ogre","&colon;japanese-ogre&colon;",'<i class="em em-japanese_ogre"></i>',"1"],
+                [":kissing-smiling-eyes:","kissing-smiling-eyes","&colon;kissing-smiling-eyes&colon;",'<i class="em em-kissing_smiling_eyes"></i>',"1"],
+                [":helicopter:","helicopter","&colon;helicopter&colon;",'<i class="em em-helicopter"></i>',"2"],
+                [":hugging-face:","hugging-face","&colon;hugging-face&colon;",'<i class="em em-hugging_face"></i>',"1"],
+                [":horse:","horse","&colon;horse&colon;",'<i class="em em-horse"></i>',"3"],
+                [":laughing:","laughing","&colon;laughing&colon;",'<i class="em em-laughing"></i>',"1"],
+                [":male-detective:","male-detective","&colon;male-detective&colon;",'<i class="em em-male-detective"></i>',"1"],
+                [":hourglass:","hourglass","&colon;hourglass&colon;",'<i class="em em-hourglass"></i>',"2"],
+                [":hushed:","hushed","&colon;hushed&colon;",'<i class="em em-hushed"></i>',"1"],
+                [":jack-o-lantern:","jack-o-lantern","&colon;jack-o-lantern&colon;",'<i class="em em-jack_o_lantern"></i>',"2"],
+                [":joy:","joy","&colon;joy&colon;",'<i class="em em-joy"></i>',"1"],
+                [":kissing:","kissing","&colon;kissing&colon;",'<i class="em em-kissing"></i>',"1"],
+                [":male-mage:","male-mage","&colon;male-mage&colon;",'<i class="em em-male_mage"></i>',"1"],
+                [":rock-sign:","rock-sign","&colon;rock-sign&colon;",'<i class="em em-i_love_you_hand_sign"></i>',"0"],
+                [":innocent:","innocent","&colon;innocent&colon;",'<i class="em em-innocent"></i>',"1"],
+                [":japan:","japan","&colon;japan&colon;",'<i class="em em-japan"></i>',"4"],
+                [":koala:","koala","&colon;koala&colon;",'<i class="em em-koala"></i>',"3"],
+                [":lemon:","lemon","&colon;lemon&colon;",'<i class="em em-lemon"></i>',"2"],
+                [":lizard:","lizard","&colon;lizard&colon;",'<i class="em em-lizard"></i>',"3"],
+                [":imp:","imp","&colon;imp&colon;",'<i class="em em-imp"></i>',"1"],
+                [":kissing-closed-eyes:","kissing-closed-eyes","&colon;kissing-closed-eyes&colon;",'<i class="em em-kissing_closed_eyes"></i>',"1"],
+                [":facing-fist:","facing-fist","&colon;facing-fist&colon;",'<i class="em em-left-facing_fist"></i>',"0"],
+                [":link:","link","&colon;link&colon;",'<i class="em em-link"></i>',"4"],
+                [":man-climbing:","man-climbing","&colon;man-climbing&colon;",'<i class="em em-man_climbing"></i>',"4"],
+                [":kissing-heart:","kissing-heart","&colon;kissing-heart&colon;",'<i class="em em-kissing_heart"></i>',"1"],
+                [":lying-face:","lying-face","&colon;lying-face&colon;",'<i class="em em-lying_face"></i>',"1"],
+                [":laughing:","laughing","&colon;laughing&colon;",'<i class="em em-laughing"></i>',"1"],
+                [":mag:","mag","&colon;mag&colon;",'<i class="em em-mag"></i>',"2"],
+                [":love-letter:","love-letter","&colon;love-letter&colon;",'<i class="em em-love_letter"></i>',"2"],
+                [":lion-face:","lion-face","&colon;lion-face&colon;",'<i class="em em-lion_face"></i>',"3"],
+                [":mask:","mask","&colon;mask&colon;",'<i class="em em-mask"></i>',"2"],
+                [":medal:","medal","&colon;medal&colon;",'<i class="em em-medal"></i>',"2"],
+                [":monkey:","monkey","&colon;monkey&colon;",'<i class="em em-monkey"></i>',"3"],
+                [":mouse:","mouse","&colon;mouse&colon;",'<i class="em em-mouse"></i>',"3"],
+                [":national-park:","national-park","&colon;national-park&colon;",'<i class="em em-national_park"></i>',"4"],
+                [":nauseated-face:","nauseated-face","&colon;nauseated-face&colon;",'<i class="em em-nauseated_face"></i>',"1"],
+                [":ocean:","ocean","&colon;ocean&colon;",'<i class="em em-ocean"></i>',"4"],
+                [":money-mouth-face:","money-mouth-face","&colon;money-mouth-face&colon;",'<i class="em em-money_mouth_face"></i>',"1"],
+                [":neutral-face:","neutral-face","&colon;neutral-face&colon;",'<i class="em em-neutral_face"></i>',"1"],
+                [":motorway:","motorway","&colon;motorway&colon;",'<i class="em em-motorway"></i>',"4"],
+                [":open-mouth:","open-mouth","&colon;open-mouth&colon;",'<i class="em em-open_mouth"></i>',"1"],
+                [":moneybag:","moneybag","&colon;moneybag&colon;",'<i class="em em-moneybag"></i>',"2"],
+                [":night-with-stars:","night-with-stars","&colon;night-with-stars&colon;",'<i class="em em-night_with_stars"></i>',"4"],
+                [":no-mouth:","no-mouth","&colon;no-mouth&colon;",'<i class="em em-no_mouth"></i>',"1"],
+                [":no-entry:","no-entry","&colon;no-entry&colon;",'<i class="em em-no_entry"></i>',"4"],
+                [":ok-hand:","ok-hand","&colon;ok-hand&colon;",'<i class="em em-ok_hand"></i>',"0"],
+                [":pizza:","pizza","&colon;pizza&colon;",'<i class="em em-pizza"></i>',"2"],
+                [":persevere:","persevere","&colon;persevere&colon;",'<i class="em em-persevere"></i>',"1"],
+                [":point-up:","point-up","&colon;point-up&colon;",'<i class="em em-point_up"></i>',"0"],
+                [":pound:","pound","&colon;pound&colon;",'<i class="em em-pound"></i>',"2"],
+                [":railway-track:","railway-track","&colon;railway-track&colon;",'<i class="em em-railway_track"></i>',"4"],
+                [":question:","question","&colon;question&colon;",'<i class="em em-question"></i>',"4"],
+                [":relaxed:","relaxed","&colon;relaxed&colon;",'<i class="em em-relaxed"></i>',"1"],
+                [":rhinoceros:","rhinoceros","&colon;rhinoceros&colon;",'<i class="em em-rhinoceros"></i>',"3"],
+                [":pensive:","pensive","&colon;pensive&colon;",'<i class="em em-pensive"></i>',"1"],
+                [":rage:","rage","&colon;rage&colon;",'<i class="em em-rage"></i>',"1"],
+                [":relieved:","relieved","&colon;relieved&colon;",'<i class="em em-relieved"></i>',"1"],
+                [":pray:","pray","&colon;pray&colon;",'<i class="em em-pray"></i>',"0"],
+                [":scream:","scream","&colon;scream&colon;",'<i class="em em-scream"></i>',"1"],
+                [":rooster:","rooster","&colon;rooster&colon;",'<i class="em em-rooster"></i>',"3"],
+                [":sleepy:","sleepy","&colon;sleepy&colon;",'<i class="em em-sleepy"></i>',"1"],
+                [":slot-machine:","slot-machine","&colon;slot-machine&colon;",'<i class="em em-slot_machine"></i>',"2"],
+                [":smiley:","smiley","&colon;smiley&colon;",'<i class="em em-smiley"></i>',"1"],
+                [":insults:","insults","&colon;insults&colon;",'<i class="em em-serious_face_with_symbols_covering_mouth"></i>',"1"],
+                [":sleeping:","sleeping","&colon;sleeping&colon;",'<i class="em em-sleeping"></i>',"1"],
+                [":slightly-frowning-face:","slightly-frowning-face","&colon;slightly-frowning-face&colon;",'<i class="em em-slightly_frowning_face"></i>',"1"],
+                [":smile:","smile","&colon;smile&colon;",'<i class="em em-smile"></i>',"1"],
+                [":em-smiling-face-with-hand-covering-mouth:","em-smiling-face-with-hand-covering-mouth","&colon;em-smiling-face-with-hand-covering-mouth&colon;",'<i class="em em-smiling_face_with_smiling_eyes_and_hand_covering_mouth"></i>',"1"],
+                [":rolling-on-the-floor-laughing:","rolling-on-the-floor-laughing","&colon;rolling-on-the-floor-laughing&colon;",'<i class="em em-rolling_on_the_floor_laughing"></i>',"1"],
+                [":robot-face:","robot-face","&colon;robot-face&colon;",'<i class="em em-robot_face"></i>',"1"],
+                [":shark:","shark","&colon;shark&colon;",'<i class="em em-shark"></i>',"3"],
+                [":skull:","skull","&colon;skull&colon;",'<i class="em em-skull"></i>',"1"],
+                [":slightly-smiling-face:","slightly-smiling-face","&colon;slightly-smiling-face&colon;",'<i class="em em-slightly_smiling_face"></i>',"1"],
+                [":smiling-imp:","smiling-imp","&colon;smiling-imp&colon;",'<i class="em em-smiling_imp"></i>',"1"],
+                [":smirk:","smirk","&colon;smirk&colon;",'<i class="em em-smirk"></i>',"1"],
+                [":space-invader:","space-invader","&colon;space-invader&colon;",'<i class="em em-space_invader"></i>',"2"],
+                [":stuck-out-tongue-winking-eye:","stuck-out-tongue-winking-eye","&colon;stuck-out-tongue-winking-eye&colon;",'<i class="em em-stuck_out_tongue_winking_eye"></i>',"1"],
+                [":sweat:","sweat","&colon;sweat&colon;",'<i class="em em-sweat"></i>',"1"],
+                [":thinking-face:","thinking-face","&colon;thinking-face&colon;",'<i class="em em-thinking_face"></i>',"1"],
+                [":triumph:","triumph","&colon;triumph&colon;",'<i class="em em-triumph"></i>',"1"],
+                [":tractor:","tractor","&colon;tractor&colon;",'<i class="em em-tractor"></i>',"2"],
+                [":sunglasses:","sunglasses","&colon;sunglasses&colon;",'<i class="em em-sunglasses"></i>',"1"],
+                [":tent:","tent","&colon;tent&colon;",'<i class="em em-tent"></i>',"2"],
+                [":sob:","sob","&colon;sob&colon;",'<i class="em em-sob"></i>',"1"],
+                [":stuck-out-tongue:","stuck-out-tongue","&colon;stuck-out-tongue&colon;",'<i class="em em-stuck_out_tongue"></i>',"1"],
+                [":sweat-smile:","sweat-smile","&colon;sweat-smile&colon;",'<i class="em em-sweat_smile"></i>',"1"],
+                [":tired-face:","tired-face","&colon;tired-face&colon;",'<i class="em em-tired_face"></i>',"1"]
+                /*,
+                ["::","","&colon;&colon;",'',""],
+                */
+            ];
+                var $smiley_icon = $("#smiley-icon");
+                var $smiley_list = $("#smiley-list");
+                var $smiley_on_list = $(".smiley-on-list");
+                var $smiley_list_c0 = $("#c0");
+                var $smiley_list_c1 = $("#c1");
+                var $smiley_list_c2 = $("#c2");
+                var $smiley_list_c3 = $("#c3");
+                var $smiley_list_c4 = $("#c4");
+                var $smiley_list_c_divers = $("#c-divers");
+                var $retrecir = $("#retrecir");
+                var $agrandir = $("#agrandir");
+                var $close = $("#close");
+                var $smiley_list_div = $("#smiley-list-div");
+                var $message = $("#message");
+                $smiley_list.hide();
+                $retrecir.hide();
+                $smiley_icon.on("click",function(){
+                    $smiley_list.fadeIn(200);
+                });
+                $close.on("click",function(){
+                    $smiley_list.fadeOut(200);
+                });
+                $agrandir.on("click",function(){
+                    $agrandir.fadeOut(100,function(){
+                        $retrecir.fadeIn(100);
+                    });
+                    $smiley_list.animate({
+                        height:"500px",
+                        width:"500px",
+                    },"slow","swing");
+                    $smiley_list_div.animate({
+                        height:"450px",
+                    },"slow","swing");
+                }); 
+                $retrecir.on("click",function(){
+                    $retrecir.fadeOut(100,function(){
+                        $agrandir.fadeIn(100);
+                    });
+                    $smiley_list.animate({
+                        height:"250px",
+                        width:"250px",
+                    },"slow","swing");
+                    $smiley_list_div.animate({
+                        height:"206px",
+                    },"slow","swing");
+                });
+
+                for (var i = emo.length - 1; i >= 0; i--) (function(i){
+                    var emo_actuel =  emo[i][3];
+                    var emo_id = emo[i][1];
+                    var emo_code = emo[i][0];
+                    var emo_position = emo[i][4];
+                    var emo_add_class = $(emo_actuel).attr('id', emo_id);
+                    if (emo_position === "0") {
+                        $(emo_add_class).appendTo($smiley_list_c0);
+                    } else if (emo_position === "1") {
+                        $(emo_add_class).appendTo($smiley_list_c1);
+                    } else if (emo_position === "2") {
+                        $(emo_add_class).appendTo($smiley_list_c2);
+                    } else if (emo_position === "3") {
+                        $(emo_add_class).appendTo($smiley_list_c3);
+                    } else if (emo_position === "4") {
+                        $(emo_add_class).appendTo($smiley_list_c4);
+                    } else {
+                        $(emo_add_class).appendTo($smiley_list_c_divers);
+                    }
+
+                    $("div#smiley-list-div i").addClass("smiley-on-list");
+                    $("#" + emo_id).on("click",function(){
+                        $message.val( $message.val() + emo_code );
+                    });   
+                })(i);    
+
+            function remplaceYourBalise(tableau,balise) {
+                for (var i=0;i<tableau.length;i++){
+                    if(tableau[i][0]===balise){
+                        return tableau[i][3];
+                    }
+                }
+                return tableau[0];            
+            }
+            function remplaceAnotherBalise(tableau,balise) {
+                for (var i=0;i<tableau.length;i++){
+                    if(tableau[i][2]===balise){
+                        return tableau[i][3];
+                    }
+                }
+                return tableau[0];            
+            }
+            function trouveYourBalise(msg) {
+                var pos1 = msg.indexOf(":");
+                if(pos1>=0){
+                    var pos2 = msg.indexOf(":", pos1+1);
+                    if(pos2>pos1){
+                        var balise = msg.substring(pos1,pos2+1);
+                        if(balise.includes(" ") === true){
+                            return false;
+                        } else {
+                            return balise;
+                        }
+                    } else {  
+                        return false;
+                    }
+                } else { 
+                    return false;
+                }
+            }
+            function trouveAnotherBalise(msg) {
+                var pos1 = msg.indexOf("&colon;");
+                if(pos1>=0){
+                    var pos2 = msg.indexOf("&colon;", pos1+1);
+                    if(pos2>pos1){
+                        var balise = msg.substring(pos1,pos2+7);
+                        if(balise.includes(" ") === true){
+                            return false;
+                        } else {
+                            return balise;
+                        }
+                    } else {   
+                        return false;
+                    }
+                } else {   
+                    return false;
+                }
+            }     
+
+            var pseudo = $("#txtpseudo").text();
+            socket.emit('nouveau_client', pseudo);
+
+            var nameOnglet = $("#txtonglet").text();
+            if (nameOnglet!==""){
+                document.title = nameOnglet;
+            }
+
+            // Quand on reçoit un message, on l'insère dans la page
+            socket.on('message', function(data) {
+                insereAutreMessage(data.pseudo, data.message)
+            })
+
+            socket.on('nouveau_client', function(pseudo) {
+                $('<p><em>' + pseudo + ' a rejoint le Chat !</em></p>').appendTo('#zone_chat');
+            })
+            socket.on('deconnection', function(pseudo) {
+                $('<p><em>' + pseudo + ' nous a abandonn&eacute;</em></p>').appendTo('#zone_chat');
+                console.log(pseudo);
+            })
+
+            // socket.on('listeClients', function(allClients) {
+            //     console.log(allClients);
+            // })
+
+            // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+            $('#formulaire_chat').submit(function () {
+                var message = $('#message').val();
+                if (message !=="") {
+                    socket.emit('message', message, pseudo); // Transmet le message aux autres
+                    insereSonMessage(pseudo, message); // Affiche le message aussi sur notre page
+                }
+                $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
+                return false; // Permet de bloquer l'envoi "classique" du formulaire
+            });
+            
+            // Ajoute un message dans la page
+            function insereAutreMessage(pseudo, message) {
+                while (emoji !== false) {
+                    var emoji = trouveAnotherBalise(message);
+                    message = message.replace(emoji,remplaceAnotherBalise(emo,emoji));
+                }    
+                var nw_msg = '<div class="row"><div class="col-md-8"><span class="bulle-autre-message"><span class="pseudo">' + pseudo + '</span>&nbsp;&nbsp;' + message + '</span></div></div>';
+                console.log(message);
+                $(nw_msg).appendTo("#zone_chat");
+                $(nw_msg).hide();
+                $(nw_msg).fadeIn(100);
+                var offset = $('#bas-de-page').offset().top;
+                $('html, body').animate({scrollTop: offset - 100}, 'slow');
+            }
+            function insereSonMessage(pseudo, message) {
+                while (emoji !== false) {
+                    var emoji = trouveYourBalise(message);
+                    message = message.replace(emoji,remplaceYourBalise(emo,emoji)); 
+                }
+                var nw_msg = '<div class="row"><div class="col-md-offset-4 col-md-8"> <span class="bulle-son-message">'+ message + '</span></div></div>';
+                $(nw_msg).appendTo("#zone_chat");
+                $(nw_msg).hide();
+                $(nw_msg).fadeIn(100);
+                var offset = $('#bas-de-page').offset().top;
+                $('html, body').animate({scrollTop: offset - 100}, 'slow');
+            }
+        </script>
+    </body>
+</html>
+

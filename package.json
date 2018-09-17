@@ -1,0 +1,12 @@
+{
+    "name": "super-chat",
+    "version": "0.1.0",
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "ejs": "^2.5.7",
+        "ent": "~0.1.0",
+        "express": "~3.3.4",
+        "session.socket.io": "^0.2.1",
+        "socket.io": "~1.2.1"
+    },
+}
